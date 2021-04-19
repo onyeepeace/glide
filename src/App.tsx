@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import DataEditor, {
+  DataEditorContainer,
+  GridCell,
+  GridCellKind,
+  GridColumn,
+} from "@glideapps/glide-data-grid";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function App() {
+  const columns: GridColumn[] = [
+    { title: "Number", width: 100 },
+    { title: "Square", width: 100 },
+  ];
+
+  function getData([col, row]: readonly [number, number]): GridCell {
+    let n: number;
+    if (col === 0) {
+      n = row;
+    } else if (col === 1) {
+      n = row * row;
+    } else {
+      throw new Error("This should not happen");
+    }
+    return {
+      kind: GridCellKind.Number,
+      data: n,
+      displayData: n.toString(),
+      allowOverlay: false,
+    };
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <DataEditorContainer width={500} height={300}>
+        <DataEditor getCellContent={getData} columns={columns} rows={1000} />
+      </DataEditorContainer>
+      <div id="portal" />
     </div>
   );
 }
 
 export default App;
+
+// git remote add origin https://github.com/onyeepeace/glide.git
